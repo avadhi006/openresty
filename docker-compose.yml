@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  resty:
+    build:
+      context: ./resty              # Path to OpenResty Dockerfile
+    ports:
+      - "8080:8080"                 # Expose OpenResty on host port 8080
+    depends_on:
+      - go_api                      # Ensure Go API starts before OpenResty
+    networks:
+      - app_network
+
+  go_api:
+    build:
+      context: ./go_api             # Path to Go API Dockerfile
+    expose:
+      - "8086"                      # Expose Go API port internally
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
